@@ -131,35 +131,10 @@ public class NawigacjaActivity extends MapActivity {
         mapView.displayZoomControls(true);
         final MapOverlay mapOverlay = new MapOverlay();
         
+        
+        LocationListener locationListener = new ConcreteLocationListener(mapOverlay, mapView);
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, new LocationListener()
-		{
-
-			public void onLocationChanged(Location location) {
-					mapOverlay.point  = new GeoPoint((int)(location.getLatitude()*1E6), 
-						(int)(location.getLongitude()*1E6));		
-					mc.animateTo(mapOverlay.point);
-					mc.setZoom(17);
-		
-			}
-
-			public void onProviderDisabled(String arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void onProviderEnabled(String arg0) {
-				// TODO Auto-generated method stub
-				
-			}
-
-			public void onStatusChanged(String arg0, int arg1, Bundle arg2) {
-				// TODO Auto-generated method stub
-				
-			}
-			
-			
-		});
+		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         
         mc = mapView.getController();
         String coordinates[] = {"54.371673","18.612381"};
