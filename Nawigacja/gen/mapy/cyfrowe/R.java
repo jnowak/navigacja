@@ -15,6 +15,8 @@ public final class R {
         public static final int pushpin=0x7f020001;
     }
     public static final class id {
+        public static final int Button01=0x7f050002;
+        public static final int Button02=0x7f050003;
         public static final int mapView=0x7f050000;
         public static final int zoom=0x7f050001;
     }
