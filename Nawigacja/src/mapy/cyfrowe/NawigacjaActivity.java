@@ -213,6 +213,13 @@ public class NawigacjaActivity extends MapActivity {
 					}
 			
         });
+        Button bt3 =(Button)findViewById(R.id.Button03);
+        bt3.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					setContentView(R.layout.menu);
+					}
+			
+        });
 
 
 				
