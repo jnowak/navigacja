@@ -1,5 +1,6 @@
 package mapy.cyfrowe;
 
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
@@ -10,8 +11,12 @@ import android.location.Geocoder;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,8 +40,10 @@ public class NawigacjaActivity extends MapActivity {
 	MapView mapView;
     MapController mc;
     GeoPoint p;
+  
     
     
+ 
     class MapOverlay extends com.google.android.maps.Overlay
     {
         @Override
@@ -51,7 +58,7 @@ public class NawigacjaActivity extends MapActivity {
  
             //---add the marker---
             Bitmap bmp = BitmapFactory.decodeResource(
-                getResources(), R.drawable.pushpin);            
+            getResources(), R.drawable.pushpin);            
             canvas.drawBitmap(bmp, screenPts.x, screenPts.y-50, null);         
             return true;
         }
@@ -76,7 +83,7 @@ public class NawigacjaActivity extends MapActivity {
                     {
                         for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
                              i++)
-                           add += addresses.get(0).getAddressLine(i) + "\n";
+                           add = addresses.get(0).getAddressLine(i) + "\n";
                     }
  
                     Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
@@ -88,14 +95,14 @@ public class NawigacjaActivity extends MapActivity {
             }
             else                
                 return false;
-        }                
+        }        
     } 
     
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+       setContentView(R.layout.main);
         mapView = (MapView) findViewById(R.id.mapView);
         LinearLayout zoomLayout = (LinearLayout)findViewById(R.id.zoom);  
         View zoomView = mapView.getZoomControls(); 
@@ -105,7 +112,7 @@ public class NawigacjaActivity extends MapActivity {
                 LayoutParams.WRAP_CONTENT, 
                 LayoutParams.WRAP_CONTENT)); 
         mapView.displayZoomControls(true);
-        mapView.setStreetView(true);
+        
         mc = mapView.getController();
         String coordinates[] = {"54.371673","18.612381"};
         double lat = Double.parseDouble(coordinates[0]);
@@ -123,6 +130,71 @@ public class NawigacjaActivity extends MapActivity {
         listOfOverlays.clear();
         listOfOverlays.add(mapOverlay);
         mapView.invalidate();
+        
+        
+       
+     /*  MyMapView mv;// = new MyMapView(this, "<your Maps API key here>");
+
+        mv = new MyMapView(this, "<your Maps API key here>");
+
+        mv.setClickable(true);
+        mv.setBuiltInZoomControls(true);
+
+        mv.setOnZoomChangeListener(new MyMapView.OnZoomChangeListener() {
+
+
+           @Override
+            public void onZoomChange(MapView view, int newZoom, int oldZoom) {
+                Log.d("test", "zoom changed from " + oldZoom + " to " + newZoom);
+            }
+        });
+        mv.setOnPanChangeListener(new MyMapView.OnPanChangeListener() {
+            public void onPanChange(MapView view, GeoPoint newCenter, GeoPoint oldCenter) {
+                Log.d("test", "center changed from " + oldCenter.getLatitudeE6() + "," + oldCenter.getLongitudeE6() + " to " + newCenter.getLatitudeE6() + "," + newCenter.getLongitudeE6());
+            }
+        });*/
+        
+        
+        
+        
+        Button bt =(Button)findViewById(R.id.Button01);
+        bt.setOnClickListener(new OnClickListener() {
+
+			@SuppressWarnings("deprecation")
+			public void onClick(View v) {
+				if(mapView.isStreetView()){
+					mapView.setStreetView(false);
+					mapView.setSatellite(true);
+				}
+				else
+				{
+					
+					mapView.setStreetView(true);
+					mapView.setSatellite(false);
+				
+				}
+				}
+        });
+        Button bt2 =(Button)findViewById(R.id.Button02);
+        bt2.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					if(mapView.isTraffic()){
+						mapView.setTraffic(false);
+					}
+					else
+					{
+						mapView.setTraffic(true);
+					
+					}
+					}
+			
+        });
+
+
+				
+			
+        
+        
     }
     @Override
     protected boolean isRouteDisplayed() {
