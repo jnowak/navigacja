@@ -44,8 +44,11 @@ public class NawigacjaActivity extends MapActivity {
 	MapView mapView;
     MapController mc;
     GeoPoint p;
-  
-    
+	private Button addPOIButton;
+
+	
+	public Location currLocation;
+	
     
  
     class MapOverlay extends com.google.android.maps.Overlay
@@ -82,7 +85,6 @@ public class NawigacjaActivity extends MapActivity {
         @Override
         public boolean onTouchEvent(MotionEvent event, MapView mapView) 
         {   
-            //---when user lifts his finger---
             if (event.getAction() == 1) {                
                 GeoPoint p = mapView.getProjection().fromPixels(
                     (int) event.getX(),
@@ -119,7 +121,8 @@ public class NawigacjaActivity extends MapActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
-       setContentView(R.layout.main);
+    	
+        setContentView(R.layout.main);
         mapView = (MapView) findViewById(R.id.mapView);
         LinearLayout zoomLayout = (LinearLayout)findViewById(R.id.zoom);  
         View zoomView = mapView.getZoomControls(); 
@@ -132,7 +135,7 @@ public class NawigacjaActivity extends MapActivity {
         final MapOverlay mapOverlay = new MapOverlay();
         
         
-        LocationListener locationListener = new ConcreteLocationListener(mapOverlay, mapView);
+        LocationListener locationListener = new ConcreteLocationListener(this, mapOverlay, mapView);
         LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         
@@ -145,15 +148,26 @@ public class NawigacjaActivity extends MapActivity {
             (int) (lat * 1E6), 
             (int) (lng * 1E6));
  
-        //mc.animateTo(p);
-        mapView.getController().animateTo(p);
+        mc.animateTo(p);
         mc.setZoom(17); 
-        //---Add a location marker---
        
         List<Overlay> listOfOverlays = mapView.getOverlays();
         listOfOverlays.clear();
         listOfOverlays.add(mapOverlay);
         mapView.invalidate();
+        
+        
+        
+        addPOIButton = (Button)findViewById(R.id.addPOI);
+        
+        addPOIButton.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View arg0) {
+				POIList.add(currLocation);
+				
+			}
+		});
+        
         
         
        

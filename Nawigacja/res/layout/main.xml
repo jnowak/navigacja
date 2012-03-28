@@ -52,4 +52,12 @@
         android:layout_toRightOf="@+id/Button02"
         android:text="Menu" />
 
+    <Button
+        android:id="@+id/addPOI"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:text="Add POI" />
+
 </RelativeLayout>

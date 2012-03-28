@@ -12,18 +12,22 @@ public class ConcreteLocationListener implements LocationListener {
 	
 	private MapOverlay mapOverlay;
 	private MapView mapView;
+	private NawigacjaActivity nawigacja;
 
-	public ConcreteLocationListener(MapOverlay mapOverlay, MapView mapView)
+	public ConcreteLocationListener(NawigacjaActivity nawigacja, MapOverlay mapOverlay, MapView mapView)
 	{
+		this.nawigacja = nawigacja;
 		this.mapOverlay = mapOverlay;
 		this.mapView = mapView;
 		
 	}
 
 	public void onLocationChanged(Location location) {
-			mapOverlay.point  = new GeoPoint((int)(location.getLatitude()*1E6), 
+		nawigacja.currLocation = location;
+		mapOverlay.point  = new GeoPoint((int)(location.getLatitude()*1E6), 
 				(int)(location.getLongitude()*1E6));
-			mapView.getController().animateTo(mapOverlay.point);
+		mapView.getController().animateTo(mapOverlay.point);
+			
 			
 		
 	}
