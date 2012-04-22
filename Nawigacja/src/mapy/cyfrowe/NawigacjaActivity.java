@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -230,7 +231,9 @@ public class NawigacjaActivity extends MapActivity {
         Button bt3 =(Button)findViewById(R.id.Button03);
         bt3.setOnClickListener(new OnClickListener() {
 				public void onClick(View v) {
-					setContentView(R.layout.menu);
+					Intent intent = new Intent();
+		            setResult(RESULT_OK, intent);
+		            finish();
 					}
 			
         });
