@@ -9,7 +9,7 @@ import android.widget.Button;
 import com.google.android.maps.MapActivity;
 import android.app.Activity;
 
-public class MenuActivity extends Activity{
+public class GoToActivity extends Activity{
 
 
 	// Called when the activity is first created.
@@ -17,26 +17,32 @@ public class MenuActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 	//Your code here
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.menu);
+		setContentView(R.layout.gotomenu);
 		
 		
-	    Button bt =(Button)findViewById(R.id.button1);
+	  /*  Button bt =(Button)findViewById(R.id.gobutton2);
 	    bt.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent myIntent = new Intent(v.getContext(), NawigacjaActivity.class);
+				Intent myIntent = new Intent(v.getContext(), MenuActivity.class);
                 startActivityForResult(myIntent, 0);
 
 				}
-	    });
-	    Button bt2 =(Button)findViewById(R.id.button3);
-	    bt2.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Intent myIntent = new Intent(v.getContext(), GoToActivity.class);
-                startActivityForResult(myIntent, 0);
-
-				}
-	    });
+	    });*/
+	    
+	    
+        Button bt3 =(Button)findViewById(R.id.gobutton2);
+        bt3.setOnClickListener(new OnClickListener() {
+				public void onClick(View v) {
+					Intent intent = new Intent();
+		            setResult(RESULT_OK, intent);
+		            finish();
+					}
+			
+        });
+	    
+	    
 	}
 
 
 }
+
