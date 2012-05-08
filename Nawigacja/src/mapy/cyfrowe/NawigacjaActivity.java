@@ -72,7 +72,6 @@ public class NawigacjaActivity extends MapActivity {
             {
 	            mapView.getProjection().toPixels(point, screenPts);
 	            
-	            //---add the marker---
 	            Bitmap bmp = BitmapFactory.decodeResource(
 	            getResources(), R.drawable.pushpin);            
 	            canvas.drawBitmap(bmp, screenPts.x, screenPts.y-50, null);  
@@ -123,6 +122,11 @@ public class NawigacjaActivity extends MapActivity {
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
+    	
+    	String s = MapWebServices.getDistanceAndTime("Gdańsk", "Warszawa", TransportMode.driving);
+    	Step[] steps = MapWebServices.getRoute("Gdansk", "Warsaw", TransportMode.driving);
+    	
+    	
         setContentView(R.layout.main);
         mapView = (MapView) findViewById(R.id.mapView);
         LinearLayout zoomLayout = (LinearLayout)findViewById(R.id.zoom);  
@@ -141,24 +145,13 @@ public class NawigacjaActivity extends MapActivity {
 		lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         
         mc = mapView.getController();
-        String coordinates[] = {"54.371673","18.612381"};
-        double lat = Double.parseDouble(coordinates[0]);
-        double lng = Double.parseDouble(coordinates[1]);
- 
-        p = new GeoPoint(
-            (int) (lat * 1E6), 
-            (int) (lng * 1E6));
- 
-        mc.animateTo(p);
-        mc.setZoom(17); 
        
         List<Overlay> listOfOverlays = mapView.getOverlays();
         listOfOverlays.clear();
         listOfOverlays.add(mapOverlay);
+        listOfOverlays.add(new Route(steps));
         mapView.invalidate();
-        
-        
-        
+
         addPOIButton = (Button)findViewById(R.id.addPOI);
         
         addPOIButton.setOnClickListener(new OnClickListener() {
@@ -169,29 +162,6 @@ public class NawigacjaActivity extends MapActivity {
 			}
 		});
         
-        
-        
-       
-     /*  MyMapView mv;// = new MyMapView(this, "<your Maps API key here>");
-
-        mv = new MyMapView(this, "<your Maps API key here>");
-
-        mv.setClickable(true);
-        mv.setBuiltInZoomControls(true);
-
-        mv.setOnZoomChangeListener(new MyMapView.OnZoomChangeListener() {
-
-
-           @Override
-            public void onZoomChange(MapView view, int newZoom, int oldZoom) {
-                Log.d("test", "zoom changed from " + oldZoom + " to " + newZoom);
-            }
-        });
-        mv.setOnPanChangeListener(new MyMapView.OnPanChangeListener() {
-            public void onPanChange(MapView view, GeoPoint newCenter, GeoPoint oldCenter) {
-                Log.d("test", "center changed from " + oldCenter.getLatitudeE6() + "," + oldCenter.getLongitudeE6() + " to " + newCenter.getLatitudeE6() + "," + newCenter.getLongitudeE6());
-            }
-        });*/
         
         
         

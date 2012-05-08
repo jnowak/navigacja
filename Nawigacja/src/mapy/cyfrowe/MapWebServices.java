@@ -22,6 +22,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import android.util.Log;
+
 import com.google.android.maps.GeoPoint;
 
 public class MapWebServices
@@ -94,15 +96,19 @@ public class MapWebServices
 			XPathFactory xPathFactory = XPathFactory.newInstance();
 			XPath path = xPathFactory.newXPath();
 			XPathExpression stepXPath = path.compile("//DirectionsResponse/route/leg/step");
-			XPathExpression startXPath = path.compile("//DirectionsResponse/route/leg/step/start_location/");
-			XPathExpression endXPath = path.compile("//DirectionsResponse/route/leg/step/end_location");
-			XPathExpression durationXPath = path.compile("//DirectionsResponse/route/leg/step/duration/text");
-			XPathExpression distanceXPath = path.compile("//DirectionsResponse/route/leg/step/distance/text");
-			XPathExpression instructionsXPath = path.compile("//DirectionsResponse/route/leg/step/html_instructions");
+			XPathExpression startLatXPath = path.compile("//DirectionsResponse/route/leg/step/start_location/lat/text()");
+			XPathExpression startLngXPath = path.compile("//DirectionsResponse/route/leg/step/start_location/lng/text()");
+			XPathExpression endLatXPath = path.compile("//DirectionsResponse/route/leg/step/end_location/lat/text()");
+			XPathExpression endLngXPath = path.compile("//DirectionsResponse/route/leg/step/end_location/lng/text()");
+			XPathExpression durationXPath = path.compile("//DirectionsResponse/route/leg/step/duration/text/text()");
+			XPathExpression distanceXPath = path.compile("//DirectionsResponse/route/leg/step/distance/text/text()");
+			XPathExpression instructionsXPath = path.compile("//DirectionsResponse/route/leg/step/html_instructions/text()");
 			
 			NodeList stepsList = (NodeList) stepXPath.evaluate(doc, XPathConstants.NODESET);
-			NodeList startList = (NodeList) startXPath.evaluate(doc, XPathConstants.NODESET);
-			NodeList endList = (NodeList) endXPath.evaluate(doc, XPathConstants.NODESET);
+			NodeList startLatList = (NodeList) startLatXPath.evaluate(doc, XPathConstants.NODESET);
+			NodeList startLngList = (NodeList) startLngXPath.evaluate(doc, XPathConstants.NODESET);
+			NodeList endLatList = (NodeList) endLatXPath.evaluate(doc, XPathConstants.NODESET);
+			NodeList endLngList = (NodeList) endLngXPath.evaluate(doc, XPathConstants.NODESET);
 			NodeList durationList = (NodeList) durationXPath.evaluate(doc, XPathConstants.NODESET);
 			NodeList distanceList = (NodeList) distanceXPath.evaluate(doc, XPathConstants.NODESET);
 			NodeList instructionsList = (NodeList) instructionsXPath.evaluate(doc, XPathConstants.NODESET);
@@ -112,14 +118,16 @@ public class MapWebServices
 			for (int i = 0; i < stepsList.getLength(); i++)
 			{
 				String s = stepsList.item(i).getChildNodes().item(0).getNodeName();
-				String name = startList.item(i).getNodeName();
-				String fc = startList.item(i).getNodeValue();
-				double startLat = Double.valueOf(startList.item(i).getFirstChild().getNodeValue());
-				double startLng = Double.valueOf(startList.item(i).getLastChild().getNodeValue());
+				String name = startLatList.item(i).getNodeName();
+				String fc = startLatList.item(i).getNodeValue();
+				Log.w("!!!@@@@!!!!!!", name);
+				Log.w("!!!@@@@!!!!!!", fc);
+				double startLat = Double.valueOf(startLatList.item(i).getNodeValue());
+				double startLng = Double.valueOf(startLngList.item(i).getNodeValue());
 				GeoPoint start = new GeoPoint((int)(startLat*1E6), (int)(startLng*1E6));
 				
-				double endLat = Double.valueOf(endList.item(i).getFirstChild().getNodeValue());
-				double endLng = Double.valueOf(endList.item(i).getLastChild().getNodeValue());
+				double endLat = Double.valueOf(endLatList.item(i).getNodeValue());
+				double endLng = Double.valueOf(endLngList.item(i).getNodeValue());
 				GeoPoint end = new GeoPoint((int)(endLat*1E6), (int)(endLng*1E6));
 				
 				String duration = durationList.item(i).getNodeValue();
@@ -130,7 +138,7 @@ public class MapWebServices
 			
 			
 		
-			return null;
+			return steps;
 
 		} catch (URISyntaxException e)
 		{
