@@ -18,6 +18,9 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -34,7 +37,7 @@ public class MapWebServices
 	{
 		try
 		{
-			URI uri = buildURI(Service.distance, origin, destination, transportMode);
+			URI uri = buildURI("xml", Service.distance, origin, destination, transportMode);
 			URLConnection connection = uri.toURL().openConnection();
 			connection.connect();
 			
@@ -79,12 +82,12 @@ public class MapWebServices
 	}
 	
 	
-	public static Step[] getRoute(String origin, String destination, TransportMode transportMode)
+	public static Step[] getRoute1(String origin, String destination, TransportMode transportMode)
 	{
 		URI uri;
 		try
 		{
-			uri = buildURI(Service.directions, origin, destination, transportMode);
+			uri = buildURI("xml", Service.directions, origin, destination, transportMode);
 			URLConnection connection = uri.toURL().openConnection();
 			connection.connect();
 			
@@ -117,11 +120,6 @@ public class MapWebServices
 			
 			for (int i = 0; i < stepsList.getLength(); i++)
 			{
-				String s = stepsList.item(i).getChildNodes().item(0).getNodeName();
-				String name = startLatList.item(i).getNodeName();
-				String fc = startLatList.item(i).getNodeValue();
-				Log.w("!!!@@@@!!!!!!", name);
-				Log.w("!!!@@@@!!!!!!", fc);
 				double startLat = Double.valueOf(startLatList.item(i).getNodeValue());
 				double startLng = Double.valueOf(startLngList.item(i).getNodeValue());
 				GeoPoint start = new GeoPoint((int)(startLat*1E6), (int)(startLng*1E6));
@@ -175,18 +173,99 @@ public class MapWebServices
 
 	}
 	
-	private static URI buildURI(Service service, String origin, String destination, TransportMode transportMode) throws URISyntaxException
+	
+	public static Step[] getRoute(String origin, String destination, TransportMode transportMode)
+	{
+		URI uri;
+
+			try
+			{
+				uri = buildURI("json", Service.directions, origin, destination, transportMode);
+				URLConnection connection = uri.toURL().openConnection();
+				connection.connect();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				
+				char[] buffer = new char[4096];
+				StringBuilder output = new StringBuilder();
+				
+				String line;
+				while ((line = reader.readLine()) != null)
+				{
+					output.append(line);
+				}
+				
+				JSONObject json = new JSONObject(output.toString());
+				
+				JSONArray routes = json.getJSONArray("routes");
+				JSONArray legs = routes.getJSONObject(0).getJSONArray("legs");
+				JSONArray steps = legs.getJSONObject(0).getJSONArray("steps");
+				Step[] step = new Step[steps.length()];
+				
+				for (int i = 0; i < steps.length(); i++)
+				{
+					String distance = steps.getJSONObject(i).getJSONObject("distance").getString("text");
+					String duration = steps.getJSONObject(i).getJSONObject("duration").getString("text");
+					String instructions = steps.getJSONObject(i).getString("html_instructions");
+					instructions.replaceAll("<*>", "");
+					
+					JSONObject startLocation = steps.getJSONObject(i).getJSONObject("start_location");
+					Double startLat = Double.valueOf(startLocation.getString("lat"));
+					Double startLng = Double.valueOf(startLocation.getString("lng"));
+					GeoPoint start = new GeoPoint((int)(startLat*1E6), (int)(startLng*1E6));
+					
+					JSONObject endLocation = steps.getJSONObject(i).getJSONObject("end_location");
+					Double endLat = Double.valueOf(endLocation.getString("lat"));
+					Double endLng = Double.valueOf(endLocation.getString("lng"));
+					GeoPoint end = new GeoPoint((int)(endLat*1E6), (int)(endLng*1E6));
+					
+					
+					
+					step[i] = new Step(start, end, duration, distance, instructions);
+					
+				}
+				
+				return step;
+				
+				
+				
+			} catch (URISyntaxException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (MalformedURLException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			} catch (JSONException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return null;
+			}
+
+
+	}
+	
+	private static URI buildURI(String format, Service service, String origin, String destination, TransportMode transportMode) throws URISyntaxException
 	{
 	
 		String originParam = (service == Service.distance) ? "origins" : "origin";
 		String destinationParam = (service == Service.distance) ? "destinations" : "destination";
-		String url = String.format("http://maps.googleapis.com/maps/api/%s/xml?language=pl" +
+		String url = String.format("http://maps.googleapis.com/maps/api/%s/%s?language=pl" +
 				"&mode=%s" +
 				"&sensor=false" +
 				"&%s=%s" +
 				"&%s=%s", 
 				new Object[] {
 				service,
+				format,
 				transportMode,
 				originParam,
 				origin,

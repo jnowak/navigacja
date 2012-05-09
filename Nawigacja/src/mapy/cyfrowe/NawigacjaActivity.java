@@ -85,7 +85,9 @@ public class NawigacjaActivity extends MapActivity {
         List<Overlay> listOfOverlays = mapView.getOverlays();
         listOfOverlays.clear();
         listOfOverlays.add(mapOverlay);
-        listOfOverlays.add(new Route(steps));
+        
+        if (steps != null)
+        	listOfOverlays.add(new Route(steps));
         mapView.invalidate();
 
         addPOIButton = (Button)findViewById(R.id.addPOI);
