@@ -206,7 +206,9 @@ public class MapWebServices
 					String distance = steps.getJSONObject(i).getJSONObject("distance").getString("text");
 					String duration = steps.getJSONObject(i).getJSONObject("duration").getString("text");
 					String instructions = steps.getJSONObject(i).getString("html_instructions");
-					instructions.replaceAll("<*>", "");
+					
+					instructions = instructions.replaceAll("</?[a-z]+>", "");
+					
 					
 					JSONObject startLocation = steps.getJSONObject(i).getJSONObject("start_location");
 					Double startLat = Double.valueOf(startLocation.getString("lat"));
