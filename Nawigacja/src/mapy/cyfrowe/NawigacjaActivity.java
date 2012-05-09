@@ -51,82 +51,13 @@ public class NawigacjaActivity extends MapActivity {
 	public Location currLocation;
 	
     
- 
-    class MapOverlay extends com.google.android.maps.Overlay
-    {
-		public GeoPoint point;
-		
-		public MapOverlay()
-		{
-			point = p;
-		}
-		@Override
-        public boolean draw(Canvas canvas, MapView mapView, 
-        boolean shadow, long when) 
-        {
-            super.draw(canvas, mapView, shadow);                   
- 
-            //---translate the GeoPoint to screen pixels---
-            Point screenPts = new Point();
-            if (point != null)
-            {
-	            mapView.getProjection().toPixels(point, screenPts);
-	            
-	            Bitmap bmp = BitmapFactory.decodeResource(
-	            getResources(), R.drawable.pushpin);            
-	            canvas.drawBitmap(bmp, screenPts.x, screenPts.y-50, null);  
-	           // mapView.getController().animateTo(point);
-	            
-	            //mapView.invalidate();
-	            
-            }
-            return true;
-        }
-        @Override
-        public boolean onTouchEvent(MotionEvent event, MapView mapView) 
-        {   
-            if (event.getAction() == 1) {                
-                GeoPoint p = mapView.getProjection().fromPixels(
-                    (int) event.getX(),
-                    (int) event.getY());
- 
-                Geocoder geoCoder = new Geocoder(
-                    getBaseContext(), Locale.getDefault());
-                try {
-                    List<Address> addresses = geoCoder.getFromLocation(
-                        p.getLatitudeE6()  / 1E6, 
-                        p.getLongitudeE6() / 1E6, 1);
- 
-                    String add = "";
-                    if (addresses.size() > 0) 
-                    {
-                        for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
-                             i++)
-                           add += addresses.get(0).getAddressLine(i) + "\n";
-                    }
- 
-                    Toast.makeText(getBaseContext(), add, Toast.LENGTH_SHORT).show();
-                }
-                catch (IOException e) {                
-                    e.printStackTrace();
-                }   
-                return true;
-            }
-            else                
-                return false;
-        }        
-    } 
-    
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
     	
     	
-    //	String s = MapWebServices.getDistanceAndTime("Gdansk", "Warszawa", TransportMode.driving);
-    //	Step[] steps = MapWebServices.getRoute("Gdansk", "Warsaw", TransportMode.driving);
     	Intent intend = getIntent();
-		//String tryb=i.getStringExtra("tryb");
+
     	String from=intend.getStringExtra("from");
     	String to=intend.getStringExtra("to");
     	String s = MapWebServices.getDistanceAndTime(from, to, TransportMode.driving);

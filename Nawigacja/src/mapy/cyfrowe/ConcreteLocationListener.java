@@ -3,7 +3,7 @@ package mapy.cyfrowe;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
 
-import mapy.cyfrowe.NawigacjaActivity.MapOverlay;
+import mapy.cyfrowe.MapOverlay;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
@@ -27,7 +27,7 @@ public class ConcreteLocationListener implements LocationListener {
 		mapOverlay.point  = new GeoPoint((int)(location.getLatitude()*1E6), 
 				(int)(location.getLongitude()*1E6));
 		mapView.getController().animateTo(mapOverlay.point);
-			
+		mapView.getController().setZoom(17);	
 			
 		
 	}
