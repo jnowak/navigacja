@@ -18,12 +18,13 @@ public class GoToActivity extends Activity{
 	//Your code here
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gotomenu);
-		
+		Intent i = getIntent();
+		String tryb=i.getStringExtra("tryb");
 		
 	  /*  Button bt =(Button)findViewById(R.id.gobutton2);
 	    bt.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Intent myIntent = new Intent(v.getContext(), MenuActivity.class);
+				Intent myIntent = new Intent(v.getContext(), NawigacjaActivity.class);
                 startActivityForResult(myIntent, 0);
 
 				}

@@ -123,9 +123,14 @@ public class NawigacjaActivity extends MapActivity {
     	super.onCreate(savedInstanceState);
     	
     	
-    	String s = MapWebServices.getDistanceAndTime("Gdańsk", "Warszawa", TransportMode.driving);
-    	Step[] steps = MapWebServices.getRoute("Gdansk", "Warsaw", TransportMode.driving);
-    	
+    //	String s = MapWebServices.getDistanceAndTime("Gdansk", "Warszawa", TransportMode.driving);
+    //	Step[] steps = MapWebServices.getRoute("Gdansk", "Warsaw", TransportMode.driving);
+    	Intent intend = getIntent();
+		//String tryb=i.getStringExtra("tryb");
+    	String from=intend.getStringExtra("from");
+    	String to=intend.getStringExtra("to");
+    	String s = MapWebServices.getDistanceAndTime(from, to, TransportMode.driving);
+        Step[] steps = MapWebServices.getRoute(from, to, TransportMode.driving);
     	
         setContentView(R.layout.main);
         mapView = (MapView) findViewById(R.id.mapView);

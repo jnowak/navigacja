@@ -39,5 +39,15 @@
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/button1"
         android:text="Wyszukaj" />
+
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/button2"
+        android:layout_marginTop="50dp"
+        android:text="Pokaz trase pomiedzy A i B" />
 
 </RelativeLayout>

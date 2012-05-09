@@ -32,6 +32,24 @@ public class MenuActivity extends Activity{
 	    bt2.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				Intent myIntent = new Intent(v.getContext(), GoToActivity.class);
+				myIntent.putExtra("tryb", "samochod");
+                startActivityForResult(myIntent, 0);
+
+				}
+	    });
+	    Button bt3 =(Button)findViewById(R.id.button4);
+	    bt3.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent myIntent = new Intent(v.getContext(), GoToActivity.class);
+				myIntent.putExtra("tryb", "pieszo");
+                startActivityForResult(myIntent, 0);
+
+				}
+	    });
+	    Button bt4 =(Button)findViewById(R.id.button5);
+	    bt4.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				Intent myIntent = new Intent(v.getContext(), FromToActivity.class);
                 startActivityForResult(myIntent, 0);
 
 				}
