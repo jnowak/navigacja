@@ -29,13 +29,16 @@ class MapOverlay extends com.google.android.maps.Overlay
         super.draw(canvas, mapView, shadow);                   
         Paint paint = new Paint();
         paint.setARGB(100, 0, 0, 255);
+        paint.setTextSize(20);
 
         Point screenPts = new Point();
         if (point != null)
         {
+        	
             mapView.getProjection().toPixels(point, screenPts);
             
             canvas.drawCircle(screenPts.x, screenPts.y, 10, paint);
+            canvas.drawText(point.toString(), 0, 100, paint);
             
         }
         return true;

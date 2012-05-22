@@ -48,8 +48,10 @@ public class NawigacjaActivity extends MapActivity {
 	private Button addPOIButton;
 
 	
-	public Location currLocation;
+	public static Location currLocation;
+	public static RouteOverlay route = new RouteOverlay();
 	
+	public List<Overlay> listOfOverlays;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,10 @@ public class NawigacjaActivity extends MapActivity {
     	
     	
     	Intent intend = getIntent();
-
+    	final MapOverlay mapOverlay = new MapOverlay();
+    	
+    	if (currLocation != null)
+    	{}
     	String from=intend.getStringExtra("from");
     	String to=intend.getStringExtra("to");
     	String s = MapWebServices.getDistanceAndTime(from, to, TransportMode.driving);
@@ -73,7 +78,7 @@ public class NawigacjaActivity extends MapActivity {
                 LayoutParams.WRAP_CONTENT, 
                 LayoutParams.WRAP_CONTENT)); 
         mapView.displayZoomControls(true);
-        final MapOverlay mapOverlay = new MapOverlay();
+        
         
         
         LocationListener locationListener = new ConcreteLocationListener(this, mapOverlay, mapView);
@@ -82,12 +87,12 @@ public class NawigacjaActivity extends MapActivity {
         
         mc = mapView.getController();
        
-        List<Overlay> listOfOverlays = mapView.getOverlays();
+        listOfOverlays = mapView.getOverlays();
         listOfOverlays.clear();
         listOfOverlays.add(mapOverlay);
-        
+        route.setSteps(steps);
         if (steps != null)
-        	listOfOverlays.add(new Route(steps));
+        	listOfOverlays.add(route);
         mapView.invalidate();
 
         addPOIButton = (Button)findViewById(R.id.addPOI);

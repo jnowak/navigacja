@@ -7,11 +7,19 @@ import android.graphics.Point;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 
-public class Route extends Overlay
+public class RouteOverlay extends Overlay
 {
 	private Step[] steps;
+	
+	public RouteOverlay()
+	{}
+	
+	public void setSteps(Step[] steps)
+	{
+		this.steps = steps;
+	}
 
-	public Route(Step[] steps)
+	public RouteOverlay(Step[] steps)
 	{
 		this.steps = steps;
 	}

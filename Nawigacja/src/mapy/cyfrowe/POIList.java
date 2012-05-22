@@ -62,6 +62,7 @@ public class POIList {
 		database = SQLiteDatabase.openOrCreateDatabase("poi.sql", null);
 		database.execSQL("create table if not exists POI_List" +
 								"(" +
+								"	id int primary key,"+
 								"	latitude double," +
 								"	longitude double" +
 								");");
